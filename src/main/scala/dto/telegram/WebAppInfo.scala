@@ -1,6 +1,8 @@
 package ru.otus
 package dto.telegram
 
-object WebAppInfo {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class WebAppInfo(url: String)

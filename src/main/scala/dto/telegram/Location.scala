@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object Location {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class Location(
     longitude: Double,
     latitude: Double,

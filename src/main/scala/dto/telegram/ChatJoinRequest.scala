@@ -3,8 +3,10 @@ package dto.telegram
 
 import java.time.Instant
 
-object ChatJoinRequest {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class ChatJoinRequest(
     chat: Chat,
     from: User,

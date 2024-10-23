@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object InlineKeyboardButton {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class InlineKeyboardButton(
     text: String,
     url: Option[String],

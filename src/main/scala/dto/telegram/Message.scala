@@ -1,14 +1,17 @@
 package ru.otus
 package dto.telegram
 
-object Message {}
+import java.time.Instant
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class Message(
     messageId: Long,
     messageThreadId: Option[Long],
     from: Option[User],
     senderChat: Option[Chat],
-    date: Long,
+    date: Instant,
     chat: Chat,
     forwardFrom: Option[User],
     forwardFromChat: Option[Chat],
@@ -72,5 +75,5 @@ case class Message(
     videoChatEnded: Option[VideoChatEnded],
     videoChatParticipantsInvited: Option[VideoChatParticipantsInvited],
     webAppData: Option[WebAppData],
-    replyMarkup: Option[InlineKeyboardMarkup]
+    replyMarkup: Option[Markup]
 )

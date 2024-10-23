@@ -1,8 +1,11 @@
 package ru.otus
 package dto.telegram
 
-object MessageReactionUpdated {}
+import dto.telegram.`type`.ReactionType
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class MessageReactionUpdated(
     chat: Chat,
     messageId: Long,

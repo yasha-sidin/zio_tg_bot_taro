@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object KeyboardButton {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class KeyboardButton(
     text: String,
     requestContact: Option[Boolean],

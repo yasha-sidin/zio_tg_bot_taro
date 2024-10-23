@@ -1,10 +1,12 @@
 package ru.otus
 package dto.telegram
 
+import zio.json._
+
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 sealed trait ChatMember
 
-object ChatMemberAdministrator {}
-@named("administrator")
 case class ChatMemberAdministrator(
     user: User,
     canBeEdited: Boolean,
@@ -23,25 +25,15 @@ case class ChatMemberAdministrator(
     customerTitle: Option[String]
 ) extends ChatMember
 
-object ChatMemberBanned {}
-@named("kicked")
 case class ChatMemberBanned(user: User, untilDate: Int) extends ChatMember
 
-object ChatMemberLeft {}
-@named("left")
 case class ChatMemberLeft(user: User) extends ChatMember
 
-object ChatMemberMember {}
-@named("member")
 case class ChatMemberMember(user: User) extends ChatMember
 
-object ChatMemberOwner {}
-@named("creator")
 case class ChatMemberOwner(user: User, isAnonymous: Boolean, customTitle: Option[String])
     extends ChatMember
 
-object ChatMemberRestricted {}
-@named("restricted")
 case class ChatMemberRestricted(
     user: User,
     isMember: Boolean,

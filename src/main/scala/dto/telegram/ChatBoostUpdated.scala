@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object ChatBoostUpdated {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class ChatBoostUpdated(
     chat: Chat,
     boost: ChatBoost

@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object ReplyParameters {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class ReplyParameters(
     messageId: String,
     chatId: Option[Long],

@@ -1,8 +1,11 @@
 package ru.otus
 package dto.telegram
 
-object Chat {}
+import dto.telegram.`type`.ChatType
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class Chat(
     id: Long,
     `type`: ChatType,

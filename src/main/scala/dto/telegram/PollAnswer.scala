@@ -1,8 +1,8 @@
 package ru.otus
 package dto.telegram
 
-object PollAnswer {
+import zio.json._
 
-}
-
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class PollAnswer(pollId: String, user: User, optionIds: Seq[Long])

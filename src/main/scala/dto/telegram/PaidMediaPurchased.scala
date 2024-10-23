@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object PaidMediaPurchased {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class PaidMediaPurchased(
     from: User,
     paidMediaPayload: String

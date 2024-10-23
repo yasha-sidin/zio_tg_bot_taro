@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object CallbackQuery {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class CallbackQuery(
     id: String,
     from: User,

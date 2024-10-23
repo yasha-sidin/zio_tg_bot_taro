@@ -1,8 +1,11 @@
 package ru.otus
 package dto.telegram
 
-object ChatBoostRemoved {}
+import dto.telegram.`type`.ChatBoostSource
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class ChatBoostRemoved(
     chat: Chat,
     boostId: String,

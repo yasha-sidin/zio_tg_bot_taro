@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object User {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class User(
     id: Long,
     isBot: Boolean,

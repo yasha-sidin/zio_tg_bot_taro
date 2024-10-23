@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object LinkPreviewOptions {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class LinkPreviewOptions(
     isDisabled: Option[Boolean],
     url: Option[String],

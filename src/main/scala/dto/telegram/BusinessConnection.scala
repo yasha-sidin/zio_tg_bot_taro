@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object BusinessConnection {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class BusinessConnection(
     id: String,
     user: User,

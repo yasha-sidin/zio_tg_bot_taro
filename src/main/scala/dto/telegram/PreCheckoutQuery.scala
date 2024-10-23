@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object PreCheckoutQuery {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class PreCheckoutQuery(
     id: String,
     from: User,

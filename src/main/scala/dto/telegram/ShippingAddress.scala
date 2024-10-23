@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object ShippingAddress {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class ShippingAddress(
     countryCode: String,
     state: String,

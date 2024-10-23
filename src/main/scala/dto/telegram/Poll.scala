@@ -1,10 +1,12 @@
 package ru.otus
 package dto.telegram
 
-import scala.concurrent.duration.Duration
+import dto.telegram.`type`.PollType
 
-object Poll {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class Poll(
     id: String,
     question: String,
@@ -17,6 +19,6 @@ case class Poll(
     correctOptionId: Option[Long],
     explanation: Option[String],
     explanationEntities: Option[Seq[MessageEntity]],
-    openPeriod: Option[Duration],
+    openPeriod: Option[Long],
     closeDate: Option[Long]
 )

@@ -1,6 +1,9 @@
 package ru.otus
 package dto.telegram
 
-object KeyboardButtonPollType {}
+import dto.telegram.`type`.PollType
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class KeyboardButtonPollType(`type`: PollType)

@@ -1,6 +1,8 @@
 package ru.otus
 package dto.telegram
 
-object CallbackGame {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class CallbackGame()

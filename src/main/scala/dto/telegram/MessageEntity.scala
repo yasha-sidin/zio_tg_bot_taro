@@ -1,8 +1,12 @@
 package ru.otus
 package dto.telegram
 
-object MessageEntity {}
+import dto.telegram.`type`.MessageEntityType
 
+import zio.json._
+
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class MessageEntity(
     `type`: MessageEntityType,
     offset: Long,

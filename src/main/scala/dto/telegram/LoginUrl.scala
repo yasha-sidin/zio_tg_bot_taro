@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object LoginUrl {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class LoginUrl(
     url: String,
     forwardText: Option[String],

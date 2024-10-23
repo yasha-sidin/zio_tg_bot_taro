@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object ChosenInlineResult {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class ChosenInlineResult(
     resultId: String,
     from: User,

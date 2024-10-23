@@ -1,8 +1,10 @@
 package ru.otus
 package dto.telegram
 
-object Update {}
+import zio.json._
 
+@jsonMemberNames(SnakeCase)
+@jsonDerive
 case class Update(
     updateId: Long,
     message: Option[Message],
