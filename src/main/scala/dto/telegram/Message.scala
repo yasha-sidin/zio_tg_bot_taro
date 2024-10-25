@@ -1,7 +1,6 @@
 package ru.otus
 package dto.telegram
 
-import java.time.Instant
 import zio.json._
 
 @jsonMemberNames(SnakeCase)
@@ -11,7 +10,7 @@ case class Message(
     messageThreadId: Option[Long],
     from: Option[User],
     senderChat: Option[Chat],
-    date: Instant,
+    date: Long,
     chat: Chat,
     forwardFrom: Option[User],
     forwardFromChat: Option[Chat],

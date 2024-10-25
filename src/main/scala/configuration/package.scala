@@ -1,6 +1,6 @@
 package ru.otus
 
-import zio.{Config, ConfigProvider, IO, ZIO, ZLayer}
+import zio.{Config, ConfigProvider, ZIO, ZLayer}
 import zio.config.magnolia._
 
 package object configuration {

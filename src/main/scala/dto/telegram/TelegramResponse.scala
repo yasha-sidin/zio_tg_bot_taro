@@ -5,4 +5,4 @@ import zio.json._
 
 @jsonMemberNames(SnakeCase)
 @jsonDerive
-case class VideoChatScheduled(startDate: Long)
+case class TelegramResponse[T](ok: Boolean, result: List[T])

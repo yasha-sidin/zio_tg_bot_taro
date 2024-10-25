@@ -1,8 +1,6 @@
 package ru.otus
 package dto.telegram
 
-import java.time.Instant
-
 import zio.json._
 
 @jsonMemberNames(SnakeCase)
@@ -14,7 +12,7 @@ case class ChatInviteLink(
     isPrimary: Boolean,
     isRevoked: Boolean,
     name: Option[String],
-    expirationDate: Option[Instant],
+    expirationDate: Option[Long],
     memberLimit: Option[Int],
     pendingJoinRequestCount: Option[Long]
 )

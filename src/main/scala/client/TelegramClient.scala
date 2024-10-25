@@ -2,13 +2,14 @@ package ru.otus
 package client
 
 import dto.telegram.request.{GetUpdatesRequest, SendMessageRequest}
-import dto.telegram.{Message, Update}
+import dto.telegram.{Message, TelegramResponse, Update}
 import dto.telegram.Message._
 import dto.telegram.Update._
+import dto.telegram.TelegramResponse._
 import dto.telegram.request.GetUpdatesRequest._
 import dto.telegram.request.SendMessageRequest._
-
 import configuration.Configuration
+
 import zio._
 import zio.json._
 import zio.http.{Body, Client, Request}
@@ -19,7 +20,7 @@ object TelegramClient {
   type TelegramClient = Service
 
   trait Service {
-    def getUpdates(getUpdatesRequest: GetUpdatesRequest): ZIO[Client & Scope, Serializable, Update]
+    def getUpdates(getUpdatesRequest: GetUpdatesRequest): ZIO[Client & Scope, Serializable, TelegramResponse[Update]]
     def sendMessage(
         sendMessageRequest: SendMessageRequest
     ): ZIO[Client & Scope, Serializable, Message]
@@ -29,7 +30,7 @@ object TelegramClient {
 
     override def getUpdates(
         getUpdatesRequest: GetUpdatesRequest
-    ): ZIO[Client & Scope, Serializable, Update] = {
+    ): ZIO[Client & Scope, Serializable, TelegramResponse[Update]] = {
       ZIO
         .scoped {
           Client
@@ -40,12 +41,9 @@ object TelegramClient {
               )
             )
             .flatMap(_.body.asString)
-        }
-        .flatMap(body => ZIO.succeed(body.fromJson[Update]))
-        .flatMap {
-          case Left(str)     => ZIO.fail(str)
-          case Right(update) => ZIO.succeed(update)
-        }
+        }.tap(body => ZIO.debug(body))
+        .flatMap(body => ZIO.fromEither(body.fromJson[TelegramResponse[Update]]))
+        .mapError(e => new RuntimeException(s"Failed to parse Update: ${e}"))
     }
 
     override def sendMessage(
@@ -62,11 +60,7 @@ object TelegramClient {
             )
             .flatMap(_.body.asString)
         }
-        .flatMap(body => ZIO.succeed(body.fromJson[Message]))
-        .flatMap {
-          case Left(str)      => ZIO.fail(str)
-          case Right(message) => ZIO.succeed(message)
-        }
+        .flatMap(body => ZIO.fromEither(body.fromJson[Message]))
     }
   }
 
