@@ -3,10 +3,6 @@ package dto.telegram
 
 import dto.telegram.`type`.PollType
 
-import zio.json._
-
-@jsonMemberNames(SnakeCase)
-@jsonDerive
 case class Poll(
     id: String,
     question: String,

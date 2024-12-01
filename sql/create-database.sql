@@ -1,0 +1,1 @@
+create DATABASE taro_bot_db;

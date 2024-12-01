@@ -14,5 +14,6 @@ libraryDependencies ++= Dependencies.postgres
 libraryDependencies ++= Dependencies.liquibase
 libraryDependencies ++= Dependencies.scalaTest
 libraryDependencies ++= Dependencies.enumeratum
+libraryDependencies ++= Dependencies.circe
 
 scalacOptions += "-Ymacro-annotations"

@@ -3,10 +3,6 @@ package dto.telegram
 
 import dto.telegram.`type`.PassportElementType
 
-import zio.json._
-
-@jsonMemberNames(SnakeCase)
-@jsonDerive
 case class EncryptedPassportElement(
     `type`: PassportElementType,
     data: Option[String],

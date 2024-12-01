@@ -12,6 +12,10 @@ object Dependencies {
   val ZioQuillVersion   = "4.8.4"
   val ZioRedisVersion   = "1.0.0"
   val ZioLoggingVersion = "2.3.2"
+
+  /**
+    * ZIO
+    */
   lazy val zio: Seq[ModuleID] = Seq(
     "dev.zio"     %% "zio"                 % ZioVersion,
     "dev.zio"     %% "zio-macros"          % ZioVersion,
@@ -71,5 +75,17 @@ object Dependencies {
   val enumeratumVersion = "1.7.5"
   lazy val enumeratum: Seq[ModuleID] = Seq(
     "com.beachape" %% "enumeratum" % enumeratumVersion
+  )
+
+  /**
+    * Circe
+    */
+  val CirceVersion = "0.14.9"
+  val CirceGenericExtrasVersion = "0.14.4"
+  val circe: Seq[ModuleID] = Seq(
+    "io.circe" %% "circe-core"           % CirceVersion,
+    "io.circe" %% "circe-generic"        % CirceVersion,
+    "io.circe" %% "circe-parser"         % CirceVersion,
+    "io.circe" %% "circe-generic-extras" % CirceGenericExtrasVersion
   )
 }

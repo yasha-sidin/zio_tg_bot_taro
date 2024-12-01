@@ -2,10 +2,8 @@ package ru.otus
 package dto.telegram.`type`
 
 import enumeratum.{EnumEntry, _}
+import io.circe.{Decoder, Encoder}
 
-import zio.json._
-
-@jsonDerive
 sealed trait ChatType extends EnumEntry
 
 object ChatType extends Enum[ChatType] {
@@ -15,6 +13,22 @@ object ChatType extends Enum[ChatType] {
   case object Supergroup extends ChatType
   case object Channel    extends ChatType
 
-  override def values: IndexedSeq[ChatType] = findValues
+  implicit val encoder: Encoder[ChatType] = Encoder.encodeString.contramap[ChatType] {
+    case ChatType.Sender     => "sender"
+    case ChatType.Private    => "private"
+    case ChatType.Group      => "group"
+    case ChatType.Supergroup => "supergroup"
+    case ChatType.Channel    => "channel"
+  }
 
+  implicit val decoder: Decoder[ChatType] = Decoder.decodeString.emap {
+    case "sender"     => Right(ChatType.Sender)
+    case "private"    => Right(ChatType.Private)
+    case "group"      => Right(ChatType.Group)
+    case "supergroup" => Right(ChatType.Supergroup)
+    case "channel"    => Right(ChatType.Channel)
+    case other        => Left(s"Unknown ChatType: $other")
+  }
+
+  override def values: IndexedSeq[ChatType] = findValues
 }

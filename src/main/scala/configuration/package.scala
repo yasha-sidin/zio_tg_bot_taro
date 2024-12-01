@@ -14,7 +14,7 @@ package object configuration {
 
   case class TelegramConfig(apiUrl: String, botToken: String)
   case class LiquibaseConfig(changeLog: String)
-  case class PostgresConfig(driver: String, url: String, user: String, password: String)
+  case class PostgresConfig(url: String, databaseName: String, user: String, password: String)
 
   private val configDescriptor: Config[AppConfig] = deriveConfig[AppConfig]
 

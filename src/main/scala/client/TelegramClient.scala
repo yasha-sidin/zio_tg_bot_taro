@@ -3,70 +3,71 @@ package client
 
 import dto.telegram.request.{GetUpdatesRequest, SendMessageRequest}
 import dto.telegram.{Message, TelegramResponse, Update}
-import dto.telegram.Message._
-import dto.telegram.Update._
-import dto.telegram.TelegramResponse._
-import dto.telegram.request.GetUpdatesRequest._
-import dto.telegram.request.SendMessageRequest._
-import configuration.Configuration
+import configuration.{Configuration, TelegramConfig}
+import configuration.CirceConfig._
 
 import zio._
-import zio.json._
 import zio.http.{Body, Client, Request}
 import zio.macros.accessible
+import io.circe.generic.extras.auto._
+import io.circe.syntax._
+import io.circe.parser._
 
 @accessible
 object TelegramClient {
+
   type TelegramClient = Service
 
   trait Service {
-    def getUpdates(getUpdatesRequest: GetUpdatesRequest): ZIO[Client & Scope, Serializable, TelegramResponse[Update]]
+    def getUpdates(
+        getUpdatesRequest: GetUpdatesRequest
+    ): RIO[Client & Scope, Either[CirceError, TelegramResponse[Update]]]
     def sendMessage(
         sendMessageRequest: SendMessageRequest
-    ): ZIO[Client & Scope, Serializable, Message]
+    ): RIO[Client & Scope, Either[CirceError, Message]]
   }
 
-  private case class ServiceImpl(config: Configuration) extends Service {
+  private case class ServiceImpl(config: TelegramConfig) extends Service {
+    private val mainUrl = s"${config.apiUrl}/bot${config.botToken}"
 
     override def getUpdates(
         getUpdatesRequest: GetUpdatesRequest
-    ): ZIO[Client & Scope, Serializable, TelegramResponse[Update]] = {
+    ): RIO[Client & Scope, Either[CirceError, TelegramResponse[Update]]] = {
       ZIO
         .scoped {
           Client
             .streaming(
               Request.post(
-                s"${config.telegram.apiUrl}/bot${config.telegram.botToken}/getUpdates",
-                Body.fromString(getUpdatesRequest.toJson)
-              )
-            )
-            .flatMap(_.body.asString)
-        }.tap(body => ZIO.debug(body))
-        .flatMap(body => ZIO.fromEither(body.fromJson[TelegramResponse[Update]]))
-        .mapError(e => new RuntimeException(s"Failed to parse Update: ${e}"))
-    }
-
-    override def sendMessage(
-        sendMessageRequest: SendMessageRequest
-    ): ZIO[Client & Scope, Serializable, Message] = {
-      ZIO
-        .scoped {
-          Client
-            .streaming(
-              Request.post(
-                s"${config.telegram.apiUrl}/bot${config.telegram.botToken}/sendMessage",
-                Body.fromString(sendMessageRequest.toJson)
+                s"$mainUrl/getUpdates",
+                Body.fromString(getUpdatesRequest.asJson.toString())
               )
             )
             .flatMap(_.body.asString)
         }
-        .flatMap(body => ZIO.fromEither(body.fromJson[Message]))
+        .flatMap(body => ZIO.succeed(decode[TelegramResponse[Update]](body)))
+    }
+
+    override def sendMessage(
+        sendMessageRequest: SendMessageRequest
+    ): RIO[Client & Scope, Either[CirceError, Message]] = {
+      ZIO
+        .scoped {
+          Client
+            .streaming(
+              Request.post(
+                s"$mainUrl/sendMessage",
+                Body.fromString(sendMessageRequest.asJson.toString())
+              )
+            )
+            .flatMap(_.body.asString)
+        }
+        .flatMap(body => ZIO.succeed(decode[Message](body)))
     }
   }
 
   val live: ZLayer[Configuration, Nothing, TelegramClient.Service] = ZLayer {
     for {
       config <- ZIO.service[Configuration]
-    } yield ServiceImpl(config)
+    } yield ServiceImpl(config.telegram)
   }
 }

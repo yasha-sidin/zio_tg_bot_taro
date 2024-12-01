@@ -1,10 +1,6 @@
 package ru.otus
 package dto.telegram
 
-import zio.json._
-
-@jsonMemberNames(SnakeCase)
-@jsonDerive
 sealed trait Markup
 
 case class ForceReply(

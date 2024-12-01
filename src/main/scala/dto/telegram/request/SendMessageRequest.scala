@@ -5,10 +5,6 @@ import dto.telegram.{LinkPreviewOptions, Markup, MessageEntity, ReplyParameters}
 
 object SendMessageRequest {}
 
-import zio.json._
-
-@jsonMemberNames(SnakeCase)
-@jsonDerive
 case class SendMessageRequest(
     businessConnectionId: String,
     chatId: Long,

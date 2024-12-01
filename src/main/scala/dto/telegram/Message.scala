@@ -1,10 +1,6 @@
 package ru.otus
 package dto.telegram
 
-import zio.json._
-
-@jsonMemberNames(SnakeCase)
-@jsonDerive
 case class Message(
     messageId: Long,
     messageThreadId: Option[Long],

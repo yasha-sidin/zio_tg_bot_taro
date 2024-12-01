@@ -3,10 +3,6 @@ package dto.telegram
 
 import dto.telegram.`type`.StickerType
 
-import zio.json._
-
-@jsonMemberNames(SnakeCase)
-@jsonDerive
 case class Sticker(
     fileId: String,
     fileUniqueId: String,

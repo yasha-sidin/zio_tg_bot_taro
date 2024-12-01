@@ -3,10 +3,6 @@ package dto.telegram
 
 import dto.telegram.`type`.MessageEntityType
 
-import zio.json._
-
-@jsonMemberNames(SnakeCase)
-@jsonDerive
 case class MessageEntity(
     `type`: MessageEntityType,
     offset: Long,
