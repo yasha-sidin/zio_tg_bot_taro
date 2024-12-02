@@ -11,7 +11,7 @@ object Dependencies {
   val ZioJsonVersion    = "0.7.3"
   val ZioQuillVersion   = "4.8.4"
   val ZioRedisVersion   = "1.0.0"
-  val ZioLoggingVersion = "2.3.2"
+  val ZioLoggingVersion = "2.4.0"
 
   /**
     * ZIO
@@ -27,7 +27,7 @@ object Dependencies {
     "dev.zio"     %% "zio-json"            % ZioJsonVersion,
     "dev.zio"     %% "zio-json-macros"     % ZioJsonVersion,
     "dev.zio"     %% "zio-logging"         % ZioLoggingVersion,
-    "dev.zio"     %% "zio-logging-slf4j"   % ZioLoggingVersion,
+    "dev.zio"     %% "zio-logging-slf4j2"  % ZioLoggingVersion,
     "io.getquill" %% "quill-jdbc-zio"      % ZioQuillVersion,
     "dev.zio"     %% "zio-redis"           % ZioRedisVersion
   )
@@ -80,12 +80,20 @@ object Dependencies {
   /**
     * Circe
     */
-  val CirceVersion = "0.14.9"
+  val CirceVersion              = "0.14.9"
   val CirceGenericExtrasVersion = "0.14.4"
   val circe: Seq[ModuleID] = Seq(
     "io.circe" %% "circe-core"           % CirceVersion,
     "io.circe" %% "circe-generic"        % CirceVersion,
     "io.circe" %% "circe-parser"         % CirceVersion,
     "io.circe" %% "circe-generic-extras" % CirceGenericExtrasVersion
+  )
+
+  /**
+    * Log4j
+    */
+  val Log4jVersion = "2.23.1"
+  val log4j: Seq[ModuleID] = Seq(
+    "ch.qos.logback" % "logback-classic" % "1.5.6"
   )
 }

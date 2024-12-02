@@ -15,5 +15,6 @@ libraryDependencies ++= Dependencies.liquibase
 libraryDependencies ++= Dependencies.scalaTest
 libraryDependencies ++= Dependencies.enumeratum
 libraryDependencies ++= Dependencies.circe
+libraryDependencies ++= Dependencies.log4j
 
 scalacOptions += "-Ymacro-annotations"

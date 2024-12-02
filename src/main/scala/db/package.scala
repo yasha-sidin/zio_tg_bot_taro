@@ -8,7 +8,7 @@ import liquibase.Liquibase
 import liquibase.database.jvm.JdbcConnection
 import liquibase.resource.{ClassLoaderResourceAccessor, CompositeResourceAccessor, SearchPathResourceAccessor}
 import zio.macros.accessible
-import zio.{RIO, ULayer, URIO, URLayer, ZIO, ZLayer}
+import zio.{RIO, RLayer, Scope, ULayer, URIO, URLayer, ZIO, ZLayer}
 
 import javax.sql.{DataSource => Source}
 
@@ -46,7 +46,7 @@ package object db {
       override def performMigration: RIO[Liqui, Unit] = liquibase.map(_.update("dev"))
     }
 
-    private def mkLiquibase(liquibaseConfig: LiquibaseConfig) =
+    private def mkLiquibase(liquibaseConfig: LiquibaseConfig): RIO[Any with Scope with DataSource, Liqui] =
       for {
         ds <- ZIO.environment[DataSource].map(_.get)
         fileAccessor <- ZIO.attempt(
@@ -63,7 +63,7 @@ package object db {
         liqui <- ZIO.attempt(new Liquibase("main.xml", fileOpener, jdbcConn))
       } yield liqui
 
-    val liquibaseLayer = ZLayer {
+    val liquibaseLayer: RLayer[Any with Scope with DataSource with Configuration, Liqui] = ZLayer {
       for {
         config <- ZIO.service[Configuration]
         liqui  <- mkLiquibase(config.liquibase)
