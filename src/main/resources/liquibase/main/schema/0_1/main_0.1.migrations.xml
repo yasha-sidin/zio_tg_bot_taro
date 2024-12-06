@@ -10,7 +10,7 @@
             <column name="id" type="number">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
-            <column name="offset" type="BIGINT">
+            <column name="offset_value" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -19,7 +19,7 @@
     <changeSet id="insert-data" author="Yakov Sidin">
         <insert tableName="offset_storage">
             <column name="id" value="0"/>
-            <column name="offset" value="0"/>
+            <column name="offset_value" value="0"/>
         </insert>
     </changeSet>
 

@@ -2,9 +2,9 @@ package ru.otus
 package dto.telegram
 
 case class LinkPreviewOptions(
-    isDisabled: Option[Boolean],
-    url: Option[String],
-    preferSmallMedia: Option[Boolean],
-    preferLargeMedia: Option[Boolean],
-    showAboveText: Option[Boolean]
+    isDisabled: Option[Boolean] = None,
+    url: Option[String] = None,
+    preferSmallMedia: Option[Boolean] = None,
+    preferLargeMedia: Option[Boolean] = None,
+    showAboveText: Option[Boolean] = None
 )

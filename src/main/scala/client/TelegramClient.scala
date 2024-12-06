@@ -1,17 +1,16 @@
 package ru.otus
 package client
 
-import dto.telegram.request.{GetUpdatesRequest, SendMessageRequest}
-import dto.telegram.{Message, TelegramResponse, Update}
+import dto.telegram.request.{GetMyCommandsRequest, GetUpdatesRequest, SendMessageRequest, SetMyCommandsRequest}
+import dto.telegram.{BotCommand, Message, TelegramResponse, Update}
 import configuration.{Configuration, TelegramConfig}
-import configuration.CirceConfig._
 
+import util.ClientUtil.requestPost
 import zio._
-import zio.http.{Body, Client, Request}
-import zio.macros.accessible
 import io.circe.generic.extras.auto._
-import io.circe.syntax._
-import io.circe.parser._
+import configuration.CirceConfig._
+import zio.http.Client
+import zio.macros.accessible
 
 @accessible
 object TelegramClient {
@@ -19,50 +18,29 @@ object TelegramClient {
   type TelegramClient = Service
 
   trait Service {
-    def getUpdates(
-        getUpdatesRequest: GetUpdatesRequest
-    ): RIO[Client & Scope, Either[CirceError, TelegramResponse[Update]]]
-    def sendMessage(
-        sendMessageRequest: SendMessageRequest
-    ): RIO[Client & Scope, Either[CirceError, Message]]
+    def getMyCommands(getMyCommandsRequest: GetMyCommandsRequest): RIO[Client & Scope, Option[TelegramResponse[List[BotCommand]]]]
+
+    def setMyCommands(setMyCommandsRequest: SetMyCommandsRequest): RIO[Client & Scope, Option[TelegramResponse[Boolean]]]
+
+    def getUpdates(getUpdatesRequest: GetUpdatesRequest): RIO[Client & Scope, Option[TelegramResponse[List[Update]]]]
+
+    def sendMessage(sendMessageRequest: SendMessageRequest): RIO[Client & Scope, Option[TelegramResponse[Message]]]
   }
 
   private case class ServiceImpl(config: TelegramConfig) extends Service {
     private val mainUrl = s"${config.apiUrl}/bot${config.botToken}"
 
-    override def getUpdates(
-        getUpdatesRequest: GetUpdatesRequest
-    ): RIO[Client & Scope, Either[CirceError, TelegramResponse[Update]]] = {
-      ZIO
-        .scoped {
-          Client
-            .streaming(
-              Request.post(
-                s"$mainUrl/getUpdates",
-                Body.fromString(getUpdatesRequest.asJson.toString())
-              )
-            )
-            .flatMap(_.body.asString)
-        }
-        .flatMap(body => ZIO.succeed(decode[TelegramResponse[Update]](body)))
-    }
+    override def getUpdates(getUpdatesRequest: GetUpdatesRequest): RIO[Client & Scope, Option[TelegramResponse[List[Update]]]] =
+      requestPost[GetUpdatesRequest, TelegramResponse[List[Update]]](s"$mainUrl/getUpdates", getUpdatesRequest, logResponse = false)
 
-    override def sendMessage(
-        sendMessageRequest: SendMessageRequest
-    ): RIO[Client & Scope, Either[CirceError, Message]] = {
-      ZIO
-        .scoped {
-          Client
-            .streaming(
-              Request.post(
-                s"$mainUrl/sendMessage",
-                Body.fromString(sendMessageRequest.asJson.toString())
-              )
-            )
-            .flatMap(_.body.asString)
-        }
-        .flatMap(body => ZIO.succeed(decode[Message](body)))
-    }
+    override def sendMessage(sendMessageRequest: SendMessageRequest): RIO[Client & Scope, Option[TelegramResponse[Message]]] =
+      requestPost[SendMessageRequest, TelegramResponse[Message]](s"$mainUrl/sendMessage", sendMessageRequest, logResponse = true)
+
+    override def getMyCommands(getMyCommandsRequest: GetMyCommandsRequest): RIO[Client & Scope, Option[TelegramResponse[List[BotCommand]]]] =
+      requestPost[GetMyCommandsRequest, TelegramResponse[List[BotCommand]]](s"$mainUrl/getMyCommands", getMyCommandsRequest, logResponse = true)
+
+    override def setMyCommands(setMyCommandsRequest: SetMyCommandsRequest): RIO[Client & Scope, Option[TelegramResponse[Boolean]]] =
+      requestPost[SetMyCommandsRequest, TelegramResponse[Boolean]](s"$mainUrl/setMyCommands", setMyCommandsRequest, logResponse = true)
   }
 
   val live: ZLayer[Configuration, Nothing, TelegramClient.Service] = ZLayer {

@@ -3,19 +3,17 @@ package dto.telegram.request
 
 import dto.telegram.{LinkPreviewOptions, Markup, MessageEntity, ReplyParameters}
 
-object SendMessageRequest {}
-
 case class SendMessageRequest(
-    businessConnectionId: String,
+    businessConnectionId: Option[String] = None,
     chatId: Long,
-    messageThreadId: Long,
+    messageThreadId: Option[Long] = None,
     text: String,
-    parseMode: Option[String],
-    entities: Option[List[MessageEntity]],
-    linkPreviewOptions: Option[LinkPreviewOptions],
-    disableNotification: Option[Boolean],
-    protectContent: Option[Boolean],
-    messageEffectId: Option[String],
-    replyParameters: Option[ReplyParameters],
-    replyMarkup: Option[Markup]
+    parseMode: Option[String] = None,
+    entities: Option[List[MessageEntity]] = None,
+    linkPreviewOptions: Option[LinkPreviewOptions] = None,
+    disableNotification: Option[Boolean] = None,
+    protectContent: Option[Boolean] = None,
+    messageEffectId: Option[String] = None,
+    replyParameters: Option[ReplyParameters] = None,
+    replyMarkup: Option[Markup] = None
 )
