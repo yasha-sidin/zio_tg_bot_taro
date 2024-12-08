@@ -3,8 +3,8 @@ package dto.telegram
 
 case class KeyboardButton(
     text: String,
-    requestContact: Option[Boolean],
-    requestLocation: Option[Boolean],
-    requestPoll: Option[KeyboardButtonPollType],
-    webApp: Option[WebAppInfo]
+    requestContact: Option[Boolean] = None,
+    requestLocation: Option[Boolean] = None,
+    requestPoll: Option[KeyboardButtonPollType] = None,
+    webApp: Option[WebAppInfo] = None
 )

@@ -14,6 +14,17 @@
                 <constraints nullable="false"/>
             </column>
         </createTable>
+        <createTable tableName="enroll_state_storage">
+            <column name="id" type="UUID">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="chat_id" type="BIGINT">
+                <constraints unique="true" nullable="false"/>
+            </column>
+            <column name="enroll_command_state" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
     </changeSet>
 
     <changeSet id="insert-data" author="Yakov Sidin">

@@ -3,12 +3,12 @@ package dto.telegram
 
 case class InlineKeyboardButton(
     text: String,
-    url: Option[String],
-    callbackData: Option[String],
-    webApp: Option[WebAppInfo],
-    loginUrl: Option[LoginUrl],
-    switchInlineQuery: Option[String],
-    switchInlineQueryCurrentChat: Option[String],
-    callbackGame: Option[CallbackGame],
-    pay: Option[Boolean]
+    url: Option[String] = None,
+    callbackData: Option[String] = None,
+    webApp: Option[WebAppInfo] = None,
+    loginUrl: Option[LoginUrl] = None,
+    switchInlineQuery: Option[String] = None,
+    switchInlineQueryCurrentChat: Option[String] = None,
+    callbackGame: Option[CallbackGame] = None,
+    pay: Option[Boolean] = None
 )

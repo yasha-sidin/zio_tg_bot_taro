@@ -4,8 +4,8 @@ import client.TelegramClient
 import configuration.Configuration
 import db.{LiquibaseService, zioDS}
 import repository.TelegramOffsetRepository
+import service.{ScheduleService, TelegramBotService, TelegramApiService}
 
-import service.{ScheduleService, TelegramService}
 import zio.config.typesafe.TypesafeConfigProvider
 import zio.{Scope, ZIO, ZLayer}
 import zio.http.Client
@@ -15,7 +15,8 @@ object App {
 
   private val buildEnv =
     configProvider >+> Configuration.live >+> TelegramClient.live >+> zioDS >+> Scope.default >+>
-      LiquibaseService.liquibaseLayer ++ TelegramOffsetRepository.live >+> TelegramService.live >+> ScheduleService.live ++ LiquibaseService.live ++ Client.default
+      LiquibaseService.liquibaseLayer ++ TelegramOffsetRepository.live >+> TelegramApiService.live >+>
+      TelegramBotService.live >+> ScheduleService.live ++ LiquibaseService.live ++ Client.default
 
   private val build = for {
     _ <- LiquibaseService.performMigration
