@@ -19,7 +19,7 @@ object MainCommand extends Enum[MainCommand]{
   case object Contacts extends MainCommand {
     override def botCommand: BotCommand = BotCommand("/contact", "Связаться со мной")
 
-    override def keyboardCommand: (KeyboardButton, Int) = (KeyboardButton(text = "Связаться со мной"), 1)
+    override def keyboardCommand: (KeyboardButton, Int) = (KeyboardButton(text = "Связаться со мной"), 0)
   }
 
   case object Enroll extends MainCommand {

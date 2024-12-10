@@ -3,11 +3,11 @@ package service
 
 import configuration.{Configuration, ScheduleConfig}
 import client.TelegramClient
-import repository.TelegramOffsetRepository
+import repository.{ChatStateRepository, TelegramOffsetRepository}
 
 import zio.http.Client
 import zio.macros.accessible
-import zio.{&, Schedule, URLayer, ZIO, ZLayer, durationLong}
+import zio.{&, Schedule, Scope, URLayer, ZIO, ZLayer, durationLong}
 
 import javax.sql.DataSource
 import scala.language.postfixOps
@@ -15,7 +15,8 @@ import scala.language.postfixOps
 @accessible
 object ScheduleService {
   type ScheduleService = Service
-  private type ScheduleServiceEnv = TelegramApiService.Service with TelegramClient.Service with Client & zio.Scope with TelegramBotService.Service with TelegramOffsetRepository.Service with DataSource
+  private type ScheduleServiceEnv =
+    TelegramApiService.Service with TelegramClient.Service with Client & Scope with TelegramBotService.Service with ChatStateRepository.Service with ChatStateService.Service with TelegramOffsetRepository.Service with DataSource
 
   trait Service {
     def runBot(): ZIO[ScheduleServiceEnv, Serializable, Unit]

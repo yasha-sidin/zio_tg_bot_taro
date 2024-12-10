@@ -3,8 +3,8 @@ package ru.otus
 import client.TelegramClient
 import configuration.Configuration
 import db.{LiquibaseService, zioDS}
-import repository.TelegramOffsetRepository
-import service.{ScheduleService, TelegramBotService, TelegramApiService}
+import repository.{ChatStateRepository, TelegramOffsetRepository}
+import service.{ChatStateService, ScheduleService, TelegramApiService, TelegramBotService}
 
 import zio.config.typesafe.TypesafeConfigProvider
 import zio.{Scope, ZIO, ZLayer}
@@ -16,7 +16,7 @@ object App {
   private val buildEnv =
     configProvider >+> Configuration.live >+> TelegramClient.live >+> zioDS >+> Scope.default >+>
       LiquibaseService.liquibaseLayer ++ TelegramOffsetRepository.live >+> TelegramApiService.live >+>
-      TelegramBotService.live >+> ScheduleService.live ++ LiquibaseService.live ++ Client.default
+      TelegramBotService.live >+> ChatStateRepository.live >+> ChatStateService.live >+> ScheduleService.live ++ LiquibaseService.live ++ Client.default
 
   private val build = for {
     _ <- LiquibaseService.performMigration
