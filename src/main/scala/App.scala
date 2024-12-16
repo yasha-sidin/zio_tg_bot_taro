@@ -20,9 +20,7 @@ object App {
 
   private val build = for {
     _ <- LiquibaseService.performMigration
-    fork <- ScheduleService.runBot().fork
-    _ <- ZIO.logInfo("Bot started...")
-    _ <- fork.join
+    _ <- ScheduleService.runBot()
   } yield ()
 
   val app: ZIO[Any, Any, Unit] = build.provideSomeLayer(buildEnv)

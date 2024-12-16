@@ -5,8 +5,10 @@ import configuration.{Configuration, ScheduleConfig}
 import client.TelegramClient
 import repository.{ChatStateRepository, TelegramOffsetRepository}
 
+import ru.otus.service
 import zio.http.Client
 import zio.macros.accessible
+import zio.stream.ZStream
 import zio.{&, Schedule, Scope, URLayer, ZIO, ZLayer, durationLong}
 
 import javax.sql.DataSource
@@ -27,7 +29,10 @@ object ScheduleService {
       for {
         botStartTime <- ZIO.succeed(System.currentTimeMillis() / 1000)
         _ <- TelegramApiService.resetUpdates()
-        _ <- TelegramBotService.process(botStartTime) repeat Schedule.fixed(config.repeat milliseconds)
+        _ <- ZStream
+          .repeatZIO(TelegramBotService.process(botStartTime))
+          .schedule(Schedule.fixed(config.repeat milliseconds))
+          .runDrain
       } yield ()
   }
 

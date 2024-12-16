@@ -25,13 +25,19 @@ object TelegramOffsetRepository {
     private val telegramOffsetSchema: Quoted[EntityQuery[TelegramOffset]] =
       querySchema[TelegramOffset]("""offset_storage""")
 
-    private val schema = quote(telegramOffsetSchema)
-
     override def getOffsetById(telegramOffsetId: TelegramOffsetId): QIO[Option[TelegramOffset]] =
-      dc.run(schema.filter(_.id == lift(telegramOffsetId.id)).take(1)).map(_.headOption)
+      dc.run {
+        quote {
+          telegramOffsetSchema.filter(_.id == lift(telegramOffsetId.id)).take(1)
+        }
+      }.map(_.headOption)
 
     override def updateOffset(telegramOffset: TelegramOffset): QIO[Unit] =
-      dc.run(schema.filter(_.id == lift(telegramOffset.id)).updateValue(lift(telegramOffset))).unit
+      dc.run {
+        quote {
+          telegramOffsetSchema.filter(_.id == lift(telegramOffset.id)).updateValue(lift(telegramOffset))
+        }
+      }.unit
   }
 
   val live: ULayer[TelegramOffsetRepository] = ZLayer.succeed(new ServiceImpl)

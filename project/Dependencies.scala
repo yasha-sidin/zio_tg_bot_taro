@@ -8,9 +8,7 @@ object Dependencies {
   val ZioVersion        = "2.1.6"
   val ZioHttpVersion    = "3.0.1"
   val ZioConfigVersion  = "4.0.2"
-  val ZioJsonVersion    = "0.7.3"
   val ZioQuillVersion   = "4.8.4"
-  val ZioRedisVersion   = "1.0.0"
   val ZioLoggingVersion = "2.4.0"
 
   /**
@@ -24,23 +22,18 @@ object Dependencies {
     "dev.zio"     %% "zio-config-magnolia" % ZioConfigVersion,
     "dev.zio"     %% "zio-config-refined"  % ZioConfigVersion,
     "dev.zio"     %% "zio-http"            % ZioHttpVersion,
-    "dev.zio"     %% "zio-json"            % ZioJsonVersion,
-    "dev.zio"     %% "zio-json-macros"     % ZioJsonVersion,
     "dev.zio"     %% "zio-logging"         % ZioLoggingVersion,
     "dev.zio"     %% "zio-logging-slf4j2"  % ZioLoggingVersion,
     "io.getquill" %% "quill-jdbc-zio"      % ZioQuillVersion,
-    "dev.zio"     %% "zio-redis"           % ZioRedisVersion
   )
 
   /**
     * ZIO test
     */
   val zioMockVersion      = "1.0.0-RC12"
-  val zioRedisTestVersion = "1.0.0"
   lazy val zioTest: Seq[ModuleID] = Seq(
     "dev.zio" %% "zio-test"           % ZioVersion,
     "dev.zio" %% "zio-test-sbt"       % ZioVersion,
-    "dev.zio" %% "zio-redis-embedded" % zioRedisTestVersion,
     "dev.zio" %% "zio-mock"           % zioMockVersion
   )
 

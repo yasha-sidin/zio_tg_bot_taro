@@ -54,17 +54,21 @@ object TelegramBotService {
       state <- ChatStateService.getOrCreateStateByChatId(message.chat.id)
       _ <- message.text match {
         case Some(text) => state.chatStateType match {
-          case ChatStateType.MainMenu => handleMainMenu(message.chat.id, text, state.id, keyboard)
-          case ChatStateType.MonthSelection => handleMonthSelection(message.chat.id, text, keyboard)
-          case ChatStateType.DaySelection => handleDaySelection(message.chat.id, text, keyboard)
-          case ChatStateType.TimeSelection => handleTimeSelection(message.chat.id, text, keyboard)
-          case ChatStateType.Confirmation => handleConfirmation(message.chat.id, text, keyboard)
+          case ChatStateType.MainMenu => handleMainMenu(message.chat.id, text, state, keyboard)
+//          case ChatStateType.MonthSelection => handleMonthSelection(message.chat.id, text, keyboard)
+//          case ChatStateType.DaySelection => handleDaySelection(message.chat.id, text, keyboard)
+//          case ChatStateType.TimeSelection => handleTimeSelection(message.chat.id, text, keyboard)
+//          case ChatStateType.Confirmation => handleConfirmation(message.chat.id, text, keyboard)
+          case ChatStateType.MonthSelection => handleMainMenu(message.chat.id, text, state, keyboard)
+          case ChatStateType.DaySelection => handleMainMenu(message.chat.id, text, state, keyboard)
+          case ChatStateType.TimeSelection => handleMainMenu(message.chat.id, text, state, keyboard)
+          case ChatStateType.Confirmation => handleMainMenu(message.chat.id, text, state, keyboard)
         }
         case None => wrongFormat(keyboard, message.chat.id)
       }
     } yield ()
 
-    private def handleMainMenu(chatId: Long, text: String, stateId: UUID, keyboard: Markup): RIO[TelegramBotServiceEnv, Unit] = for {
+    private def handleMainMenu(chatId: Long, text: String, state: ChatState, keyboard: Markup): RIO[TelegramBotServiceEnv, Unit] = for {
       info <- ZIO.succeed(MainCommand.Info.keyboardCommand._1.text)
       enroll <- ZIO.succeed(MainCommand.Enroll.keyboardCommand._1.text)
       contacts <- ZIO.succeed(MainCommand.Contacts.keyboardCommand._1.text)
@@ -72,7 +76,7 @@ object TelegramBotService {
         case `info` => TelegramApiService.sendMessage(SendMessageRequest(text = "Info command", replyMarkup = Some(keyboard), chatId = chatId))
         case `enroll` => for {
           monthKeyboard <- KeyboardUtil.getMonthKeyboard
-          _ <- ChatStateService.updateState(ChatState(stateId, chatId, ChatStateType.MonthSelection))
+          _ <- ChatStateService.updateState(state.copy(chatStateType = ChatStateType.MonthSelection))
           _ <- TelegramApiService.sendMessage(SendMessageRequest(text = "Выберите месяц для записи", replyMarkup = Some(monthKeyboard), chatId = chatId))
         } yield ()
         case `contacts` => TelegramApiService.sendMessage(SendMessageRequest(text = "Contacts command", replyMarkup = Some(keyboard), chatId = chatId))
