@@ -9,6 +9,10 @@ sealed trait ChatStateType extends EnumEntry
 object ChatStateType extends Enum[ChatStateType] {
   case object MainMenu extends ChatStateType
 
+  case object BookingCancel extends ChatStateType
+
+  case object BookingCancelConfirmation extends ChatStateType
+
   case object MonthSelection extends ChatStateType
 
   case object DaySelection extends ChatStateType

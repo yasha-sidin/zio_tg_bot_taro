@@ -1,9 +1,9 @@
 version: '2'
 
 services:
-  postgres:
+  postgres_bot:
     image: postgres:latest
-    container_name: postgres
+    container_name: postgres_bot
     command:
       - "postgres"
       - "-c"

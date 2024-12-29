@@ -2,10 +2,9 @@ package ru.otus
 package service
 
 import configuration.{Configuration, ScheduleConfig}
-import client.TelegramClient
+import client.{BackendClient, TelegramClient}
 import repository.{ChatStateRepository, TelegramOffsetRepository}
 
-import ru.otus.service
 import zio.http.Client
 import zio.macros.accessible
 import zio.stream.ZStream
@@ -18,7 +17,16 @@ import scala.language.postfixOps
 object ScheduleService {
   type ScheduleService = Service
   private type ScheduleServiceEnv =
-    TelegramApiService.Service with TelegramClient.Service with Client & Scope with TelegramBotService.Service with ChatStateRepository.Service with ChatStateService.Service with TelegramOffsetRepository.Service with DataSource
+    TelegramApiService.Service
+      with TelegramClient.Service
+      with Client & Scope
+      with TelegramBotService.Service
+      with ChatStateRepository.Service
+      with ChatStateService.Service
+      with TelegramOffsetRepository.Service
+      with BackendClient.Service
+      with BackendService.Service
+      with DataSource
 
   trait Service {
     def runBot(): ZIO[ScheduleServiceEnv, Serializable, Unit]

@@ -1,6 +1,6 @@
 package ru.otus
 
-import zio.{Config, ConfigProvider, ZIO, ZLayer}
+import zio.{ Config, ConfigProvider, ZIO, ZLayer }
 import zio.config.magnolia._
 
 package object configuration {
@@ -8,17 +8,24 @@ package object configuration {
       telegram: TelegramConfig,
       postgres: PostgresConfig,
       liquibase: LiquibaseConfig,
-      schedule: ScheduleConfig
-  )
+      schedule: ScheduleConfig,
+      backend: BackendConfig,
+    )
 
   type Configuration = AppConfig
 
   case class TelegramConfig(apiUrl: String, botToken: String)
   case class LiquibaseConfig(changeLog: String)
-  case class PostgresConfig(url: String, databaseName: String, user: String, password: String)
+  case class PostgresConfig(
+      url: String,
+      databaseName: String,
+      user: String,
+      password: String,
+    )
+  case class BackendConfig(url: String)
 
-  /**
-    * @param repeat milliseconds
+  /** @param repeat
+    *   milliseconds
     */
   case class ScheduleConfig(repeat: Long)
 

@@ -15,13 +15,23 @@ object KeyboardUtil {
     )
   }
 
-  def getMonthKeyboard: UIO[ReplyKeyboardMarkup] = ZIO.succeed {
+  def getStringKeyboardWithCancel(list: Seq[String]): UIO[ReplyKeyboardMarkup] = ZIO.succeed {
     ReplyKeyboardMarkup(
       keyboard = Seq(
-        Seq(KeyboardButton("Декабрь"), KeyboardButton("Январь"), KeyboardButton("Отмена"))
+        list.map(el => KeyboardButton(text = el)) :+ KeyboardButton(text = "Отмена")
       ),
       resizeKeyboard = Some(true),
-      oneTimeKeyboard = Some(true)
+      oneTimeKeyboard = Some(false)
+    )
+  }
+
+  def getConfirmationKeyboard: UIO[ReplyKeyboardMarkup] = ZIO.succeed {
+    ReplyKeyboardMarkup(
+      keyboard = Seq(
+        Seq(KeyboardButton(text = "Подтвердить"), KeyboardButton(text = "Отмена"))
+      ),
+      resizeKeyboard = Some(true),
+      oneTimeKeyboard = Some(false)
     )
   }
 }

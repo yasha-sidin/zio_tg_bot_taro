@@ -24,6 +24,9 @@
             <column name="chat_state_type" type="VARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
+            <column name="selected_appointment_to_cancel" type="UUID">
+                <constraints nullable="true"/>
+            </column>
             <column name="selected_month" type="VARCHAR(255)">
                 <constraints nullable="true"/>
             </column>

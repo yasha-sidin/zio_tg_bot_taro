@@ -9,8 +9,9 @@ case class ChatState(
     id: UUID,
     chatId: Long,
     chatStateType: ChatStateType,
+    selectedAppointmentToCancel: Option[UUID] = None,
     selectedMonth: Option[String] = None,
-    selectedDay: Option[Int] = None,
+    selectedDay: Option[String] = None,
     selectedTime: Option[String] = None
 )
 

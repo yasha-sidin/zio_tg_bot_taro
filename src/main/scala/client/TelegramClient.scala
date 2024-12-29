@@ -5,10 +5,11 @@ import dto.telegram.request.{DeleteMyCommandsRequest, GetMyCommandsRequest, GetU
 import dto.telegram.{BotCommand, Message, TelegramResponse, Update}
 import configuration.{Configuration, TelegramConfig}
 import util.ClientUtil.requestPost
+import configuration.CirceConfig._
 
 import zio._
 import io.circe.generic.extras.auto._
-import configuration.CirceConfig._
+
 
 import zio.http.Client
 import zio.macros.accessible
@@ -30,7 +31,7 @@ object TelegramClient {
     def sendMessage(sendMessageRequest: SendMessageRequest): RIO[Client & Scope, Option[TelegramResponse[Message]]]
   }
 
-  private case class ServiceImpl(config: TelegramConfig) extends Service {
+  private class ServiceImpl(config: TelegramConfig) extends Service {
     private val mainUrl = s"${config.apiUrl}/bot${config.botToken}"
 
     override def getUpdates(getUpdatesRequest: GetUpdatesRequest): RIO[Client & Scope, Option[TelegramResponse[List[Update]]]] =
@@ -52,6 +53,6 @@ object TelegramClient {
   val live: ZLayer[Configuration, Nothing, TelegramClient.Service] = ZLayer {
     for {
       config <- ZIO.service[Configuration]
-    } yield ServiceImpl(config.telegram)
+    } yield new ServiceImpl(config.telegram)
   }
 }
